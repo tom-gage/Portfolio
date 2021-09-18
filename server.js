@@ -29,6 +29,6 @@ app.post('/', function(req, res){
     console.log(messages)
 })
 
-server.listen(9000, function(req, response){
+server.listen(process.env.PORT || 9000, function(req, response){
     console.log("listening on port 9000");
 })
