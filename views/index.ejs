@@ -1,58 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Main Menu Page</title>
-    <link rel="stylesheet" href="CSS/stylesheet.css">
+    <head>
+        <meta charset="UTF-8">
+        <title>Main</title>
 
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<body>
-<div class="jumbotron text-center">
-    <div class="row">
-        <div class="col-md-2">
 
-        </div>
-        <div class="col-md-8">
-            <h1>Hello there</h1>
-        </div>
-        <div class="col-md-2">
-        </div>
-    </div>
+        
+    </head>
 
-</div>
+    <body>
+        <script type="module" src="client.js"></script>
 
-<div class="container-fluid text-center">
-    <div class="row">
-        <div class="col-md-3">
+        <div class="jumbotron text-center">
+            <div class="row">
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-8">
+                    <h1>Hello there</h1>
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
 
         </div>
 
-        <div class="col-md-6">
-            <p>no rude words, looking at you Rhys</p>
+        <div class="container-fluid text-center">
+            <div class="row">
+                <div class="col-md-3">
 
-            <form action="/" method="POST">
-                <textarea name="myInput" value="" placeholder=""></textarea>
-                <br>
-                <input type="submit" value="Speak!">
-            </form>
+                </div>
 
-            <br>
+                <div class="col-md-6">
+                    <p>no rude words, looking at you Rhys</p>
 
-            <p><%= messagesList%></p>
+                    <form action="/" method="POST">
+                        <textarea name="myInput" value="" placeholder=""></textarea>
+                        <br>
+                        <input type="submit" value="Speak!">
+                    </form>
 
+                    <br>
+
+                    <p><%= messagesList%></p>
+
+                </div>
+
+                <div class="col-md-3">
+
+                </div>
+            </div>
         </div>
 
-        <div class="col-md-3">
-
-        </div>
-    </div>
-</div>
-
-</body>
+    </body>
 </html>

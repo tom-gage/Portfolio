@@ -5,8 +5,10 @@ import time
 
 engine = pyttsx3.init()
 
+print("started!")
+
 while True:
-    time.sleep(10)
+
     
     print("fetching messages...")
     
@@ -19,5 +21,7 @@ while True:
         engine.say(message)
 
     engine.runAndWait()
+
+    time.sleep(60)
 
 
