@@ -1,7 +1,8 @@
 const http = require('http');
 const bodyParser = require('body-parser');
 const path = require('path');
-const express = require('express')
+const express = require('express');
+const { Console } = require('console');
 const app = express()
 
 app.use(express.static(__dirname + '/views'))
@@ -24,7 +25,13 @@ app.get('/', function(req, res){
 
 
 app.post('/', function(req, res){
-    messages.push(req.body.myInput);
+    const message = req.body.messageInput;
+    messages.push(message);
+    isHaiku = false;
+
+    //begin some temp tests
+    // console.log("begin tests");
+    // console.log(getLineFromHaiku(message, 2));
 
     res.render('index.ejs',{
         messagesList : JSON.stringify(messages)
@@ -32,6 +39,78 @@ app.post('/', function(req, res){
 
     console.log(messages)
 })
+
+function detectHaiku(potentialHaiku){
+    let line;
+    let syllableCount;
+
+    if(countNewLines(potentialHaiku) > 3){
+        return false;
+    }
+    
+    line = getLineFromHaiku(potentialHaiku, 0);
+    syllableCount = getNumberOfSyllables(line);
+
+    if(syllableCount != 5){
+        return false;
+    }
+
+    line = getLineFromHaiku(potentialHaiku, 1);
+    syllableCount = getNumberOfSyllables(line);
+
+    if(syllableCount != 7){
+        return false;
+    }
+
+    line = getLineFromHaiku(potentialHaiku, 2);
+    syllableCount = getNumberOfSyllables(line);
+
+    if(syllableCount != 5){
+        return false;
+    }
+
+    return true;
+}
+
+function countNewLines(potentialHaiku){
+    return (str.match(/\n/g) || '').length + 1 //counts the length of the array returned by str.match()
+
+}
+
+function getLineFromHaiku(potentialHaiku, lineNumber){
+    let currentLineIndex = 0;
+    let beginingOfSlice = 0;
+    let endOfSlice = 0;
+
+    console.log("begin: getLineFromHaiku()")
+
+    for (i = 0; i < potentialHaiku.length; i++){
+        endOfSlice++;
+
+
+
+        if (potentialHaiku[i] == '\n' || i + 2 > potentialHaiku.length){
+
+            console.log("COMPARING: " + currentLineIndex + " VS " + lineNumber);
+
+            if(currentLineIndex == lineNumber){
+                return potentialHaiku.slice(beginingOfSlice, endOfSlice);
+            }
+
+            beginingOfSlice = endOfSlice
+            currentLineIndex++;
+        }
+
+    }
+
+    return "error!";
+
+}
+
+function getNumberOfSyllables(sentance){
+
+}
+
 
 //three js routes
 app.get('/3d', function(req, res){
