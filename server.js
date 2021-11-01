@@ -19,25 +19,33 @@ let messages = [];
 //index routes
 app.get('/', function(req, res){
     res.render('index.ejs', {
-        messagesList : JSON.stringify(messages)
+        messagesList : JSON.stringify(messages),
+        firstLine : "",
+        secondLine : "",
+        thirdLine : ""
     });
 })
 
 
 app.post('/', function(req, res){
     const message = req.body.messageInput;
-    messages.push(message);
-    isHaiku = false;
-
     //begin some temp tests
     // console.log("begin tests");
-    // console.log(getLineFromHaiku(message, 2));
+    console.log("number of syllables in line 0: " + getNumberOfSyllables(getLineFromHaiku(message, 0)));
+    //tests end here
+
+    isHaiku = detectHaiku(message)
+
+    if(isHaiku){
+        messages.push(message);
+    }
 
     res.render('index.ejs',{
-        messagesList : JSON.stringify(messages)
+        messagesList : JSON.stringify(messages),
+        firstLine : getNumberOfSyllables(getLineFromHaiku(message, 0)) + " : " + getLineFromHaiku(message, 0),
+        secondLine : getNumberOfSyllables(getLineFromHaiku(message, 1)) + " : " + getLineFromHaiku(message, 1),
+        thirdLine : getNumberOfSyllables(getLineFromHaiku(message, 2)) + " : " + getLineFromHaiku(message, 2)
     });
-
-    console.log(messages)
 })
 
 function detectHaiku(potentialHaiku){
@@ -73,7 +81,7 @@ function detectHaiku(potentialHaiku){
 }
 
 function countNewLines(potentialHaiku){
-    return (str.match(/\n/g) || '').length + 1 //counts the length of the array returned by str.match()
+    return (potentialHaiku.match(/\n/g) || '').length + 1 //counts the length of the array returned by str.match()
 
 }
 
@@ -82,33 +90,75 @@ function getLineFromHaiku(potentialHaiku, lineNumber){
     let beginingOfSlice = 0;
     let endOfSlice = 0;
 
-    console.log("begin: getLineFromHaiku()")
-
     for (i = 0; i < potentialHaiku.length; i++){
         endOfSlice++;
 
-
-
         if (potentialHaiku[i] == '\n' || i + 2 > potentialHaiku.length){
-
-            console.log("COMPARING: " + currentLineIndex + " VS " + lineNumber);
 
             if(currentLineIndex == lineNumber){
                 return potentialHaiku.slice(beginingOfSlice, endOfSlice);
             }
-
             beginingOfSlice = endOfSlice
             currentLineIndex++;
         }
 
     }
 
-    return "error!";
+    return "";
 
 }
 
-function getNumberOfSyllables(sentance){
+function getNumberOfSyllables(sentence){
+    let syllableCount = 0;
 
+    let vowelsPattern = /[aeiouy]/gi
+
+    const consecutiveVowelsPattern = /[aeiouy][aeiouy]/gi
+
+    const consecutiveVowelsExceptionsPattern = /eo\b/gi
+
+    const silentEPattern = /[aeiouy][bcdfghjklmnpqrstvwxz]e\b|[bcdfghjklmnpqrstvwxz][bcdfghjklmnpqrstvwxz]e\b|\b[aeiouy]y[aeiouy]\b/gi
+
+    const silentEExceptionsPattern = /[iy]re\b/gi
+
+    const endingInSMPattern = /sm\b/gi
+
+    //count the vowels in the sentance
+    while (vowelsPattern.exec(sentence)) {
+        ++syllableCount;
+    }
+
+
+    //for each pair of consecutive vowels, subtract one
+    while (consecutiveVowelsPattern.exec(sentence)) {
+        --syllableCount;
+    }
+
+    while (consecutiveVowelsExceptionsPattern.exec(sentence)) {
+        ++syllableCount;
+    }
+
+
+    //for each word ending in a silent e, subtract one
+    while (silentEPattern.exec(sentence)) {
+        --syllableCount;
+    }
+
+    while (silentEExceptionsPattern.exec(sentence)) {
+        ++syllableCount;
+    }
+
+    //for each word ending in sm, add one
+    while (endingInSMPattern.exec(sentence)) {
+        ++syllableCount;
+    }
+
+    if(syllableCount < 1){
+        return 1
+    }
+
+    return syllableCount;
+    
 }
 
 
